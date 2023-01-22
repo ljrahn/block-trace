@@ -1,0 +1,26 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: IchnaeaCore
+    network: goerli
+    source:
+      address: "0xbd3b64162fb20E3229Ef8f918d5C2033799d41Da"
+      abi: IchnaeaCore
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ProductCreated
+        - UpdateInstance
+      abis:
+        - name: IchnaeaCore
+          file: ./abis/IchnaeaCore.json
+      eventHandlers:
+        - event: ProductCreated(indexed uint32,indexed string,string,string,string[],string[],string[],address[])
+          handler: handleProductCreated
+        - event: UpdateInstance(indexed bytes32,indexed uint32,uint64[],bool[])
+          handler: handleUpdateInstance
+      file: ./src/ichnaea-core.ts
