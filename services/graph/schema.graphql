@@ -1,0 +1,25 @@
+type ProductCreated @entity(immutable: true) {
+  id: Bytes!
+  productId: BigInt! # uint32
+  productName: String! # string
+  productWeight: String! # string
+  ipfsDocumentUrl: String! # string
+  companyName: [String!] # string[]
+  location: [String!] # string[]
+  travelMethod: [String!] # string[]
+  signer: [Bytes!] # address[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type UpdateInstance @entity(immutable: true) {
+  id: Bytes!
+  instanceId: Bytes! # bytes32
+  productId: BigInt! # uint32
+  timeStamp: [BigInt!] # uint64[]
+  signedOff: [Boolean!] # bool[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

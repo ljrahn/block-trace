@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/IchnaeaCore.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n\n/**\n *  @authors: [@ljrahn]\n *  @reviewers: []\n *  @auditors: []\n *  @bounties: []\n *  @deployments: []\n */\n\npragma solidity 0.8.13;\n\n\ncontract IchnaeaCore {\n\n    uint8 immutable maxSupplyChainLength = 20;\n\n    struct InstanceVerifierDetails {\n        uint64 timeStamp;\n        bool signedOff;\n    }\n    \n    struct ProductVerifierDetails {\n        string companyName;\n        string location;\n        string travelMethod;\n        address signer;\n    }\n\n    struct Product {\n        string productName;\n        string productWeight; // kg\n        string ipfsDocumentUrl;\n    }\n\n    // mapping for translating an id of an instance of a product to a product id\n    mapping(bytes32 => uint32) public instanceIdToProductId;\n\n    // product ID counter to keep track of product id\n    uint32 public productIdCounter;\n\n    // a product as defined by the Product struct\n    mapping(uint32 => Product) public productIdToProduct;\n\n    // definition for a supply chain route\n    mapping(uint32 => ProductVerifierDetails[]) public productIdToProductVerifierSupplyChain; \n\n    // actual status of where a product instance is in the supply chain \n    mapping(bytes32 => InstanceVerifierDetails[]) public instanceIdToInstanceVerifierSupplyChain;\n\n\n    event ProductCreated(uint32 indexed productId, string indexed productName, string productWeight, string ipfsDocumentUrl, ProductVerifierDetails[] productVerfierDetails);\n    event UpdateInstance(bytes32 indexed instanceId, uint32 indexed productId, InstanceVerifierDetails[] instanceVerifierDetails);\n\n    function createProduct(Product memory _product, ProductVerifierDetails[] memory _supplyChainRoute) public {\n        productIdToProduct[productIdCounter] = _product;\n\n        require(_supplyChainRoute.length <= maxSupplyChainLength, \"provided supplyChainRoute length is too long. length must be less than or equal to 20\");\n        require(_supplyChainRoute.length >= 1, \"provided supplyChainRoute is too short. length must be greater than or equal to 1.\");\n        \n        for (uint8 i = 0; i < _supplyChainRoute.length; i++) {\n            productIdToProductVerifierSupplyChain[productIdCounter].push(_supplyChainRoute[i]);\n        }\n\n        emit ProductCreated({\n            productId: productIdCounter,\n            productName: _product.productName,\n            productWeight: _product.productWeight,\n            ipfsDocumentUrl: _product.ipfsDocumentUrl,\n            productVerfierDetails: _supplyChainRoute\n        });\n\n        productIdCounter++;\n    } \n\n    function instantiateProductInstance(bytes32 _instanceId, uint32 _productId) public {\n        ProductVerifierDetails[] memory _supplyChainRoute = productIdToProductVerifierSupplyChain[_productId];\n\n        require(_productId >= 0 && _productId < productIdCounter, \"productId does not exist.\");\n        require(instanceIdToInstanceVerifierSupplyChain[_instanceId].length == 0, \"instanceId already exists\");\n        require(_supplyChainRoute[0].signer == msg.sender, \"incorrect signer for instantiating a product instance\");\n\n        instanceIdToProductId[_instanceId] = _productId;\n        // instanceIdToInstanceVerifierSupplyChain[_instanceId] = new InstanceVerifierDetails[](_supplyChainRoute.length);\n\n        for (uint8 i = 0; i < _supplyChainRoute.length; i++) {\n            if (i == 0) {\n                instanceIdToInstanceVerifierSupplyChain[_instanceId].push(InstanceVerifierDetails({\n                    signedOff: true,\n                    timeStamp: uint64(block.timestamp)\n                }));\n            } else {\n                instanceIdToInstanceVerifierSupplyChain[_instanceId].push(InstanceVerifierDetails({\n                    signedOff: false,\n                    timeStamp: 0\n                })); \n            }\n        }\n\n        emit UpdateInstance({\n            instanceId: _instanceId,\n            productId: _productId,\n            instanceVerifierDetails: instanceIdToInstanceVerifierSupplyChain[_instanceId]\n        });\n    }\n\n    function verifyInstance(bytes32 _instanceId) public {\n        uint32 _productId = instanceIdToProductId[_instanceId];\n        require(instanceIdToInstanceVerifierSupplyChain[_instanceId].length > 0, \"instance has not yet been instantiated\");\n\n        ProductVerifierDetails[] memory _supplyChainRoute = productIdToProductVerifierSupplyChain[_productId];\n\n        for (uint8 i = 0; i < _supplyChainRoute.length; i++) {\n            if (instanceIdToInstanceVerifierSupplyChain[_instanceId][i].signedOff == false) {\n                require(_supplyChainRoute[i].signer == msg.sender, \"invalid signer\");\n                instanceIdToInstanceVerifierSupplyChain[_instanceId][i].signedOff = true;\n                instanceIdToInstanceVerifierSupplyChain[_instanceId][i].timeStamp = uint64(block.timestamp);\n                break;\n            } else if (instanceIdToInstanceVerifierSupplyChain[_instanceId][i].signedOff == true && i == _supplyChainRoute.length - 1) {\n                revert(\"product has already gone through complete supply chain\");\n            }\n        }\n\n        emit UpdateInstance({\n            instanceId: _instanceId,\n            productId: _productId,\n            instanceVerifierDetails: instanceIdToInstanceVerifierSupplyChain[_instanceId]\n        });\n    }\n}"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

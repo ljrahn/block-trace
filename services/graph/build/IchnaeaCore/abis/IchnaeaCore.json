@@ -1,0 +1,305 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "productId",
+        "type": "uint32"
+      },
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "productName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "productWeight",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "ipfsDocumentUrl",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "companyName",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "location",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "travelMethod",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "signer",
+        "type": "address[]"
+      }
+    ],
+    "name": "ProductCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "instanceId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "productId",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64[]",
+        "name": "timeStamp",
+        "type": "uint64[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool[]",
+        "name": "signedOff",
+        "type": "bool[]"
+      }
+    ],
+    "name": "UpdateInstance",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "productName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "productWeight",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ipfsDocumentUrl",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IchnaeaCore.Product",
+        "name": "_product",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "companyName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "travelMethod",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "signer",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IchnaeaCore.ProductVerifierDetails[]",
+        "name": "_supplyChainRoute",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "createProduct",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "instanceIdToInstanceVerifierSupplyChain",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "timeStamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "bool",
+        "name": "signedOff",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "instanceIdToProductId",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_instanceId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_productId",
+        "type": "uint32"
+      }
+    ],
+    "name": "instantiateProductInstance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "productIdCounter",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "name": "productIdToProduct",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "productName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "productWeight",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "ipfsDocumentUrl",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "productIdToProductVerifierSupplyChain",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "companyName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "travelMethod",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "signer",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_instanceId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "verifyInstance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
