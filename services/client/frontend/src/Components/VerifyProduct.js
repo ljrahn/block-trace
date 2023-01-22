@@ -17,17 +17,36 @@ const VerifyProduct = () => {
     e.preventDefault();
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0x539B0723076683e1804c80817B2A0db3FDC9352b",
+      "0xbd3b64162fb20E3229Ef8f918d5C2033799d41Da",
       IchnaeaAbi.abi,
       signer
     );
-    setInstanceId(ethers.utils.randomBytes(32));
     console.log(instanceId);
     try {
       const transaction = await contract.instantiateProductInstance(
         instanceId,
         e.target[0].value
       );
+
+      const result = await transaction.wait();
+      setInstanceId(ethers.utils.randomBytes(32));
+
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function verifyProduct(e) {
+    e.preventDefault();
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      "0xbd3b64162fb20E3229Ef8f918d5C2033799d41Da",
+      IchnaeaAbi.abi,
+      signer
+    );
+    try {
+      const transaction = await contract.verifyInstance(e.target[0].value);
 
       const result = await transaction.wait();
       console.log(result);
@@ -38,7 +57,7 @@ const VerifyProduct = () => {
 
   return (
     <Container>
-      <h1>Verify Product</h1>
+      <h1>Instantiate Instance</h1>
 
       <Form onSubmit={instantiateProduct}>
         <Row>
@@ -58,6 +77,29 @@ const VerifyProduct = () => {
           Submit
         </Button>
       </Form>
+      {instanceId ? <div>{instanceId}</div> : <></>}
+
+      <h1>Verify Instance</h1>
+
+      <Form onSubmit={verifyProduct}>
+        <Row>
+          <Col>
+            <Form.Group className="mb-3" controlId="instanceId">
+              <Form.Label>Instance ID</Form.Label>
+              <Form.Control type="pName" placeholder="" />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Button
+          variant="primary"
+          type="submit"
+          style={{ backgroundColor: "#1347C5", borderColor: "#1347C5" }}
+        >
+          Submit
+        </Button>
+      </Form>
+      {instanceId ? <div>{instanceId}</div> : <></>}
     </Container>
   );
 };

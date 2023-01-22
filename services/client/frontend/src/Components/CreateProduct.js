@@ -41,7 +41,7 @@ const CreateProduct = () => {
 
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      "0x539B0723076683e1804c80817B2A0db3FDC9352b",
+      "0xbd3b64162fb20E3229Ef8f918d5C2033799d41Da",
       IchnaeaAbi.abi,
       signer
     );
