@@ -1,9 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 import { ethers, providers } from 'ethers';
 import { gql, graphql } from '@apollo/client';
 import IchnaeaAbi from "./IchnaeaCore.json";
+import NavbarComp from './Components/NavbarComp';
 
 function App() {
 
@@ -19,8 +19,6 @@ function App() {
     instanceID:'',
     travelMethod:'', 
   });
-
-
 
   async function requestAccount(){
     console.log("Requesting Account...");
@@ -50,13 +48,14 @@ function App() {
   }
 
   async function createProduct(){
-    const signer = provider.getSigner();
+    const signer = _provider.getSigner();
     const contract = new ethers.Contract("0x539B0723076683e1804c80817B2A0db3FDC9352b", IchnaeaAbi.abi, signer);
     try {
       const transaction = await contract.createProduct(
         {
           productName: createdProduct.productName,
-          productWeight: createdProduct.product
+          productWeight: createdProduct.product,
+          ipfsDocumentUrl: "ipfs://",
         },
         [
           {
@@ -104,11 +103,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div style={{justifyContent:"space-around"}}>
-        <button style={{ background: "white"}} onClick={requestAccount}>Request Account</button>
-        <button style={{ background: "white"}} onClick={connectWallet}>Connect Wallet</button><br/>
-        <button style={{ background: "white"}} >Create Product</button><br/>
-        <form onSubmit={handleSubmit}>
+      <NavbarComp/>
+         <div>
+         <button style={{ background: "white", margin: "1%"}} onClick={requestAccount}>Request Account</button><br/>
+        <button style={{ background: "white"}} onClick={connectWallet}>Connect Wallet</button>
+        {/* <button style={{ background: "white"}} >Create Product</button><br/> */}
+        {/* <form onSubmit={handleSubmit}>
           <input type="text" placeholder="companyName" name="companyName" id="companyName" onChange={handleChange} value={createdProduct.companyName}/>
           <input type="text" placeholder="location" name="location" id="location" onChange={handleChange}  value={createdProduct.location}/>
           <input type="text" placeholder="productName" name="productName" id="productName" onChange={handleChange}  value={createdProduct.productName}/>
@@ -117,8 +117,8 @@ function App() {
           <input type="text" placeholder="productID" name="productID" id="productID" onChange={handleChange}  value={createdProduct.productID}/>
           <input type="text" placeholder="instanceID" name="instanceID" id="instanceID" onChange={handleChange}  value ={createdProduct.instanceID}/>
           <button type="submit" style={{ background: "white"}}>Create Product</button>
-        </form>
-        <h2>Wallet Address:{walletAddress}</h2>
+        </form> */}
+         <h2>Wallet Address:{walletAddress}</h2>
         </div>
       </header>
     </div> 
