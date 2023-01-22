@@ -1,7 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 import { ethers } from 'ethers';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import NavbarComp from './Components/NavbarComp';
 
 function App() {
 
@@ -41,7 +42,10 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+
+      <NavbarComp/>
+
+      {/* <header className="App-header">
         <div style={{justifyContent:"space-around"}}>
         <button style={{ background: "white"}} onClick={requestAccount}>Request Account</button>
         <button style={{ background: "white"}} onClick={connectWallet}>Connect Wallet</button><br/>
@@ -50,7 +54,7 @@ function App() {
         <h2>Wallet Address:{walletAddress|"N/A"}</h2>
         <h2>GasPrice: {gasPrice|"na"}</h2>
         </div>
-      </header>
+      </header> */}
     </div> 
   );
 }
